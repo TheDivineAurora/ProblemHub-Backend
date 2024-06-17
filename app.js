@@ -35,16 +35,24 @@ app.get('/', (req, res) => {
 });
 
 app.get('/register', checkNotAuthenicated, (req, res) => {
-    res.render("register.ejs");
+    const profile = req.session.tempUserProfile;
+    res.render("register.ejs", {
+        email: profile? profile.emails[0].value : '',
+        isReadOnly: !!profile,
+    });
+
 })
 
 app.post('/register', checkNotAuthenicated, async (req, res) => {
+    
     try {
         const {email, password, username} = req.body;
+        const googleProfile = req.session.tempUserProfile;
         const newUser = new User({
             username: username,
             email: email,
-            password: password
+            password: password,
+            googleId: googleProfile?.id,
         });
         await newUser.save();
         res.redirect('/login');
@@ -63,6 +71,20 @@ app.post('/login', checkNotAuthenicated, passport.authenticate('local', {
     successRedirect: "/dashboard",
     failureRedirect: "/login",
 }));
+
+app.get('/auth/google', passport.authenticate('google', {scope : ['email', 'profile']}));
+
+app.get('/auth/google/callback', 
+    passport.authenticate('google', {failureRedirect: '/login'}),
+    (req, res) => {
+        console.log("axa");
+        if(!req.user){
+            req.session.tempUserProfile = req.authInfo.profile;
+            return res.redirect('/register');
+        }
+        return res.redirect('/dashboard');
+    }
+)
 
 app.post('/logout', function(req, res, next){
     req.logout(function(err) {

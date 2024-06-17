@@ -27,19 +27,27 @@ function initialize(passport) {
     
     passport.use(new LocalStrategy (authUser));
 
-    // passport.use(new GoogleStrategy({
-    //     clientID: process.env.GOOGLE_CLIENT_ID,
-    //     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    //     callbackURL: 'http://localhost:3000/auth/google/callback'
-    // },
-    // async function(token, tokenSecret, profile, done){
-    //     const userExists = await User.findOne({googleId: profile.id});
-    //     if(!userExists){
-    //        done(null, false);
-    //     }
-    //        done(null, userExists);
-    //     }
-    // ));
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: 'http://localhost:3000/auth/google/callback'
+    },
+    async function(token, tokenSecret, profile, done){
+        try{
+            const userExists = await User.findOne({googleId: profile.id});
+            if(!userExists){
+                console.log(profile)
+                return done(null, false, {profile});
+            }
+            else{
+                return done(null, userExists);
+            }
+        }
+        catch(error){
+            return done(err, false)
+        }
+    }
+    ));
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });

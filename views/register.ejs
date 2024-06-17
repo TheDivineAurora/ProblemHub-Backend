@@ -1,13 +1,15 @@
 <h1> Register </h1>
 <form action="/register" method="POST">
+    <% if (isReadOnly) { %>
+        EMAIL <input type="email" id="email" name="email" value="<%= email %>" required readonly>
+    <% } else { %>
+        EMAIL <input type="email" id="email" name="email" value="<%= email %>" required>
+    <% } %>
     <div>
-        EMAIL <input type="email" name="email">
-    </div>
+        USERNAME <input type="text" name="username" required>
+    </div>  
     <div>
-        USERNAME <input type="text" name="username">
-    </div>
-    <div>
-        PASSWORD <input type="password" name="password">
+        PASSWORD <input type="password" name="password" required>
     </div>
     <button type="submit"> Submit </button>
 </form>
