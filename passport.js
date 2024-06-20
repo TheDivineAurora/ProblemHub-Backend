@@ -33,25 +33,28 @@ function initialize(passport) {
         callbackURL: 'http://localhost:3000/auth/google/callback'
     },
     async function(token, tokenSecret, profile, done){
-        try{
+        try {
             const userExists = await User.findOne({googleId: profile.id});
             if(!userExists){
-                console.log(profile)
-                return done(null, false, {profile});
+                const newUser = new User({
+                    email : profile.emails[0].value,
+                    username: profile.displayName.split(' ')[0],
+                    googleId: profile.id
+                });
+                await newUser.save();
+                return done(null, newUser);
             }
-            else{
-                return done(null, userExists);
-            }
-        }
-        catch(error){
-            return done(err, false)
+            return done(null, userExists);
+        } catch (error) {
+            console.log(error);
+            return done(null, false);
         }
     }
     ));
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
-    
+
     passport.deserializeUser(async(id, done) => {
         const user = await User.findById(id);
         if(!user){
