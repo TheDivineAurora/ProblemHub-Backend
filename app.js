@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const dotenv = require('dotenv');
-const User = require('./src/models/user.models.js');
+const authRouter = require('./src/routes/auth.routes.js')
+const sheetRouter = require('./src/routes/sheet.routes.js')
+const problemRouter = require('./src/routes/problem.routes.js')
 const initializePassport = require('./passport.js');
 dotenv.config();
 initializePassport(passport);
@@ -34,62 +36,6 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/register', checkNotAuthenicated, (req, res) => {
-    res.render("register.ejs");
-})
-
-app.post('/register', async (req, res) => {
-    try {
-        const {email, password, username} = req.body;
-        const newUser = new User({
-            username: username,
-            email: email,
-            password: password,
-        });
-        await newUser.save();
-        res.redirect('/login');
-    } catch (error) {
-        console.log(error);
-        res.redirect('/register');
-    }
-})
-
-app.get('/login', checkNotAuthenicated, (req, res) => {
-    res.render("login.ejs");
-})
-
-app.post('/login', checkNotAuthenicated, passport.authenticate('local', {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login",
-}));
-
-app.get('/auth/google', passport.authenticate('google', {scope : ['email', 'profile']}));
-
-app.get('/auth/google/callback', 
-    passport.authenticate('google', {failureRedirect: '/login', successRedirect: '/dashboard'}),
-)
-
-app.post('/logout', function(req, res, next){
-    req.logout(function(err) {
-      if (err) { return next(err); }
-      res.redirect('/login');
-    });
-});
-
-app.get('/dashboard', checkAuthenicated, (req, res) => {
-    res.render('dashboard.ejs', {name: req.user.username});
-})
-
-function checkAuthenicated(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/login');
-}
-
-function checkNotAuthenicated(req, res, next){
-    if(req.isAuthenticated()){
-        res.redirect('/dashboard');
-    }
-    next();
-}
+app.use('', authRouter);
+app.use('/problem', problemRouter);
+app.use('/sheet', sheetRouter);
