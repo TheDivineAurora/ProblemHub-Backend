@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const dotenv = require('dotenv');
+const cors = require("cors");
 const authRouter = require('./src/routes/auth.routes.js')
 const sheetRouter = require('./src/routes/sheet.routes.js')
 const problemRouter = require('./src/routes/problem.routes.js')
@@ -12,7 +13,8 @@ initializePassport(passport);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: "secret",
     resave: false ,
@@ -21,6 +23,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
 
 app.set('view engine', 'ejs');
 

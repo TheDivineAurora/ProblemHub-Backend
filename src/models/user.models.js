@@ -45,7 +45,13 @@ const UserSchema = new mongoose.Schema({
     profileImageUrl: {
         type: String,
         default: "",
-    }
+    },
+    sheets : [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "sheets"
+        }
+    ] 
 
 })
 

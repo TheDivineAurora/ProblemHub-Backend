@@ -12,6 +12,19 @@ const ProblemSchema = new mongoose.Schema({
     problemJudge: {
         type: String,
         required: [true, "problem judge is required"]
+    },
+    problemCode: {
+        type: String,
+        required: [true, "problem code is required"],
+        unique: true
+    },
+    contestId: {
+        type: String,
+        required: [true, "problem code is required"]       
+    },
+    problemIndex: {
+        type: String,
+        required: [true, "problem code is required"]
     }
 })
 

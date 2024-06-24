@@ -17,5 +17,4 @@ const SheetSchema = new mongoose.Schema({
     ]
 })
 
-
-module.exports = mongoose.model("sheet", SheetSchema);
+module.exports = mongoose.model("sheets", SheetSchema);

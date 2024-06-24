@@ -1,7 +1,0 @@
-1. first user selects oj and paste the problem link
-2. a request containing problem link and problemJudge hits our end point
-3. we check the judge , as of now only codeforces are accepted
-4. we decipher the problem links and find the contest ID and problem Index
-// here we can optimize website by storing a contest data in our database so we can decrease no of requests (dp idea)
-5. we make a codeforces request for the contest information , receive the problems object
-6. we can enroll all the problems in our database and return the response
