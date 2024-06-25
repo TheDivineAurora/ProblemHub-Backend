@@ -1,7 +1,7 @@
 const axios = require('axios')
 const Problem = require('../models/problem.models')
 const Sheet = require('../models/sheet.models')
-const { response_400, response_200, response_500, response_401 } = require('../utils/responseCodes.utils');
+const { response_400, response_200, response_500, response_401, response_404 } = require('../utils/responseCodes.utils');
 
 exports.addProblemToSheet = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ exports.addProblemToSheet = async (req, res) => {
 
         const sheet = await Sheet.findById(sheetId);
         if(!sheet){
-            return response_500(res, "Sheet not found");
+            return response_404(res, "Sheet not found");
         }
 
         const problemExists = await Problem.findOne({ problemCode: problem.code });
@@ -91,4 +91,28 @@ exports.getProblem = async (req, res) => {
         console.log(error);
         return response_500(res, "Internal server error!");
     }
+}
+
+exports.deleteProblemFromSheet = async (req, res) => {
+    try{
+        const { sheetId, problemId } = req.body;
+        if(!sheetId || !problemId){
+            return response_400(res, "Missing required fields");
+        }
+        const sheet = await Sheet.findByIdAndUpdate(
+            sheetId,
+            { $pull : { problems : problemId} },
+            { new : true }
+        );
+
+        if(!sheet){
+            return response_404(res, "Sheet not found");
+        }
+
+        return response_200(res, "Problem deleted succesfully", sheet);
+        
+    } catch(error){
+        console.log(error);
+        return response_500(res, "Internal server error!");
+    }  
 }

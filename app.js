@@ -5,6 +5,7 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const cors = require("cors");
 const authRouter = require('./src/routes/auth.routes.js')
+const userRouter = require('./src/routes/user.routes.js')
 const sheetRouter = require('./src/routes/sheet.routes.js')
 const problemRouter = require('./src/routes/problem.routes.js')
 const initializePassport = require('./passport.js');
@@ -40,5 +41,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('', authRouter);
+app.use('/user', userRouter);
 app.use('/problem', problemRouter);
 app.use('/sheet', sheetRouter);

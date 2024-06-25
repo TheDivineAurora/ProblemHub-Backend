@@ -1,10 +1,33 @@
 sheet routes 
-    -> create sheet
+    -> create sheet 
     -> update sheet
+    -> copy sheet (from , to)
     -> delete sheet
     -> get sheet
 
 problem routes
     -> add problem to sheet
+        -> using api
+            -> codeforces
+        -> scraping - Pending
+            -> atcoder 
+            -> codechef 
+            -> leetcode 
     -> delete problem from sheet
     -> get problem
+
+user routes
+    -> get user by username
+    -> update user
+
+auth routes
+    -> register
+    -> login
+    -> auth/google 
+
+multer and cloudinary for image uploads - Pending
+
+middleware safety checks for all routes
+avoid duplicates of problems in same sheet - Pending
+implement search users - Pending
+remove ejs involvement- Pending

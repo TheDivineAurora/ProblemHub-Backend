@@ -1,13 +1,15 @@
+const { response_401, response_403 } = require("../utils/responseCodes.utils");
+
 exports.checkAuthenicated = (req, res, next) => {
     if(req.isAuthenticated()){
-        return next();
+        next();
     }
-    res.redirect('/login');
+    return response_401(res);
 }
 
 exports.checkNotAuthenicated = (req, res, next) => {
     if(req.isAuthenticated()){
-        res.redirect('/dashboard');
+        return response_403(res);
     }
     next();
 }
