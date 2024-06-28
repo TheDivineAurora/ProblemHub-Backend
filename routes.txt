@@ -28,5 +28,5 @@ auth routes
 multer and cloudinary for image uploads 
 middleware safety checks for all routes
 avoid duplicates of problems in same sheet
+remove ejs involvement - flow for login unknown
 implement search users - Pending
-remove ejs involvement

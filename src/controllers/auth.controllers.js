@@ -44,4 +44,4 @@ const uploadToCloudinary = async (file) => {
         );
         stream.end(file.buffer);
     });
-}
+};

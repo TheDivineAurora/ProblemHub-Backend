@@ -5,7 +5,7 @@ const { checkAuthenicated } = require("../middlewares/auth.middlewares");
 const { checkSheetOwner } = require("../middlewares/sheet.middlewares");
 const router = express.Router();
 
-router.post('/', checkAuthenicated, checkSheetOwner, deconstructUrl, addProblemToSheet);
+router.post('/',  deconstructUrl, addProblemToSheet);
 router.get('/', getProblem);
 router.delete('/', checkAuthenicated, checkSheetOwner, deleteProblemFromSheet);
 
