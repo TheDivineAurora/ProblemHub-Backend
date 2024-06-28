@@ -17,8 +17,10 @@ exports.addProblemToSheet = async (req, res) => {
 
         const problemExists = await Problem.findOne({ problemCode: problem.code });
         if(problemExists){
-            sheet.problems.push(problemExists._id);
-            await sheet.save();
+            if(!sheet.problems.includes(problemExists._id)){
+                sheet.problems.push(problemExists._id);
+                await sheet.save();
+            }
             return response_200(res, "Succesfully added the problem", sheet);
         }
 

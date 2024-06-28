@@ -1,33 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const passport = require('passport');
-const {checkAuthenicated, checkNotAuthenicated} = require('../middlewares/auth.middlewares')
-router.get('/register', checkNotAuthenicated, (req, res) => {
-    res.render("register.ejs");
-})
+const upload = require('../middlewares/fileUpload.middlewares');
+const { checkAuthenicated, checkNotAuthenicated } = require('../middlewares/auth.middlewares');
+const { register } = require('../controllers/auth.controllers');
 
-router.post('/register', async (req, res) => {
-    try {
-        const {email, password, username} = req.body;
-        const newUser = new User({
-            username: username,
-            email: email,
-            password: password,
-        });
-        await newUser.save();
-        res.redirect('/login');
-    } catch (error) {
-        console.log(error);
-        res.redirect('/register');
-    }
-})
 
-router.get('/login', checkNotAuthenicated, (req, res) => {
-    res.render("login.ejs");
-})
+
+router.post('/register', upload.single('avatar'), register);
 
 router.post('/login', checkNotAuthenicated, passport.authenticate('local', {
-    successRedirect: "/dashboard",
+    successRedirect: "/",
     failureRedirect: "/login",
 }));
 
@@ -43,9 +26,5 @@ router.post('/logout', function(req, res, next){
       res.redirect('/login');
     });
 });
-
-router.get('/dashboard', checkAuthenicated, (req, res) => {
-    res.render('dashboard.ejs', {name: req.user.username});
-})
 
 module.exports = router;

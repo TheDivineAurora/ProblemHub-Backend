@@ -8,6 +8,7 @@ const authRouter = require('./src/routes/auth.routes.js')
 const userRouter = require('./src/routes/user.routes.js')
 const sheetRouter = require('./src/routes/sheet.routes.js')
 const problemRouter = require('./src/routes/problem.routes.js')
+const cloudinary = require('cloudinary').v2;
 const initializePassport = require('./passport.js');
 dotenv.config();
 initializePassport(passport);
@@ -31,6 +32,12 @@ app.set('view engine', 'ejs');
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
