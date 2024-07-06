@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user.models');
 
 exports.checkAuthenicated = async (req, res, next) => {
-    const authToken = req.cookies.token || req.token;
+    const authToken = req.cookies?.token || req.token;
 
     if(!authToken) {
         return response_404(res, "No token provided");

@@ -9,7 +9,7 @@ problem routes
     -> add problem to sheet
         -> using api
             -> codeforces
-        -> scraping - Pending
+        -> scraping 
             -> atcoder 
             -> codechef 
             -> leetcode 
@@ -19,6 +19,7 @@ problem routes
 user routes
     -> get user by username
     -> update user
+    -> get user sheets - pending
 
 auth routes
     -> register
@@ -28,5 +29,4 @@ auth routes
 multer and cloudinary for image uploads 
 middleware safety checks for all routes
 avoid duplicates of problems in same sheet
-remove ejs involvement - flow for login unknown
 implement search users - Pending

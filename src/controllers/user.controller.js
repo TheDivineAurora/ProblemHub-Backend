@@ -39,7 +39,16 @@ exports.updateUser = async(req, res) => {
         
         return response_200(res, "User updated succesfully", user);   
     } catch (error) {
-        console.log(error);
+        console.log(error); 
         return response_500(res, "Internal server error");              
+    }
+}
+
+exports.getSessionUser = async(req, res) => {
+    try{
+        return response_200(res, "User fetched succesfully", req.user);
+    } catch (error) {
+        console.log(error);
+        return response_500(res, "Error in getting Session User");              
     }
 }

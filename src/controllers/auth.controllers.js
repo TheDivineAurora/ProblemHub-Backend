@@ -4,15 +4,14 @@ const { response_500, response_200, response_401, response_400 } = require('../u
 
 exports.register = async (req, res) => {
     try {
-        const {email, password, username} = req.body;
-        if(!email || !password || !username)
+        const {email, username, password} = req.body;
+        if(!email || !username || !password)
             return response_400(res, 'Missing required fields');
 
         const userExists = await User.findOne({ username : username});
         if(userExists){
             return response_401(res, 'Username already exists');
         }
-
         const profileImageUrl = req.file? await uploadToCloudinary(req.file) : null;
         const newUser = new User({
             username: username,
