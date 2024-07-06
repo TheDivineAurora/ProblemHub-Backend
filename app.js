@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const cors = require("cors");
@@ -9,9 +8,8 @@ const userRouter = require('./src/routes/user.routes.js')
 const sheetRouter = require('./src/routes/sheet.routes.js')
 const problemRouter = require('./src/routes/problem.routes.js')
 const cloudinary = require('cloudinary').v2;
-const initializePassport = require('./passport.js');
 dotenv.config();
-initializePassport(passport);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -23,8 +21,6 @@ app.use(session({
     saveUninitialized: true ,
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(cors());
 
 app.set('view engine', 'ejs');
@@ -47,7 +43,7 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.use('', authRouter);
+app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/problem', problemRouter);
 app.use('/sheet', sheetRouter);
