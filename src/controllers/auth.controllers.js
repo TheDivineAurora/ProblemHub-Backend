@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { response } = require('express');
 const User = require('../models/user.models');
 const { response_500, response_200, response_401, response_400 } = require('../utils/responseCodes.utils');
 
@@ -74,6 +75,16 @@ exports.login = async (req, res) => {
     } catch (error) {
         console.log(error);
         return response_500(res, "Error creating user");
+    }
+}
+
+exports.logout = async(req, res) => {
+    try{
+        res.clearCookie("token");
+        return response_200(res, "User logged out succesfully");
+    }
+    catch(error) {
+        return response_500(res, "Error logging out", error);
     }
 }
 
