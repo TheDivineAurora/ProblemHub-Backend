@@ -20,15 +20,63 @@ exports.register = async (req, res) => {
             password: password,
             profileImageUrl: profileImageUrl
         });
-        await newUser.save();
-    
-        return response_200(res, "Account created Succesfully", newUser);
+        const savedUser = await newUser.save();
+
+        //sending token in cookie
+        const token = await savedUser.generateToken();
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+        });
+
+        return response_200(res, "User created Succesfully", {
+            email: savedUser.userExists,
+            username: savedUser.username,
+            token : token
+        });
     } catch (error) {
         console.log(error);
-        return response_500(res, "Internal Server Error");
+        return response_500(res, "Error creating user");
     }
 }
 
+
+exports.login = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        if(!email || !password)
+            return response_400(res, 'Missing required fields');
+        const userExists = await User.findOne({ email : email})
+        .select("password email username")
+        .exec();;
+
+        if (!userExists) {
+            return response_400(res, "User not found");
+        }
+        const passwordMatch = await userExists.comparePassword(password);
+        if (!passwordMatch) {
+            return response_401(res, "Invalid Password");
+        }
+
+        //sending token in cookie
+        const token = await userExists.generateToken();
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+        });
+
+        return response_200(res, "User Logged In Succesfully", {
+            email: userExists.email,
+            username: userExists.username,
+            token : token
+        });
+    } catch (error) {
+        console.log(error);
+        return response_500(res, "Error creating user");
+    }
+}
 
 const uploadToCloudinary = async (file) => {
     return new Promise((resolve, reject) => {
