@@ -8,22 +8,22 @@ const userRouter = require('./src/routes/user.routes.js')
 const sheetRouter = require('./src/routes/sheet.routes.js')
 const problemRouter = require('./src/routes/problem.routes.js')
 const cloudinary = require('cloudinary').v2;
+const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: "secret",
-    resave: false ,
-    saveUninitialized: true ,
-}));
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
-app.use(cors());
-
-app.set('view engine', 'ejs');
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
