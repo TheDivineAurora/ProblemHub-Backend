@@ -33,7 +33,6 @@ exports.register = async (req, res) => {
         return response_200(res, "User created Succesfully", {
             email: savedUser.userExists,
             username: savedUser.username,
-            token : token
         });
     } catch (error) {
         console.log(error);
@@ -74,7 +73,7 @@ exports.login = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        return response_500(res, "Error creating user");
+        return response_500(res, "Error Logging in the user");
     }
 }
 
