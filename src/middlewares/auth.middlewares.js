@@ -11,16 +11,15 @@ exports.checkAuthenicated = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(authToken, process.env.JWT_KEY);
-
         const user = await User.findById(decoded._id);
-
+        
         if(!user){
             return response_404(res, "User not found!");
         }
+        
 
         req.body.user = user;
         req.user = user;    
-
         next();
     } catch (error) {
         return response_500(res, "Failed to authenicate user", error);

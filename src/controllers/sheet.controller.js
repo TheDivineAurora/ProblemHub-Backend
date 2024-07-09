@@ -31,7 +31,8 @@ exports.createSheet = async (req, res) => {
 exports.getSheet = async (req, res) => {
     try{
         const {sheetId} = req.body;
-        const sheet = await Sheet.findById(sheetId);
+        console.log(sheetId);
+        const sheet = await Sheet.findById(sheetId).populate("problems");
         if(!sheet){
             return response_404(res, "Sheet not found");
         }

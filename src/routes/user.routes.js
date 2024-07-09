@@ -6,4 +6,4 @@ const { checkAuthenicated } = require("../middlewares/auth.middlewares");
 router.get('/', getUser);
 router.get('/profile', checkAuthenicated, getSessionUser);
 router.patch('/',checkAuthenicated, updateUser);
-module.exports = router;
+module.exports = router;    

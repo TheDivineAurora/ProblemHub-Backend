@@ -1,4 +1,5 @@
 const User = require('../models/user.models');
+const Sheet = require('../models/sheet.models');
 const { response_404, response_400, response_200, response_500, response_401 } = require('../utils/responseCodes.utils');
 
 exports.getUser = async(req, res) => {
@@ -15,6 +16,20 @@ exports.getUser = async(req, res) => {
         }
     
         return response_200(res, "User found succesfully", user);    
+    } catch (error) {
+        console.log(error);
+        return response_500(res, "Internal server error");
+    }
+}
+
+exports.getUserSheets = async(req, res) => {
+    try {
+        const user = req.user;
+        const userSheets = await Promise.all(user.sheets.map(async (sheetId) => {
+            const sheet = await Sheet.findById(sheetId).populate("problems");
+            return sheet;
+        }))
+        return response_200(res, "User Sheets found succesfully", userSheets);    
     } catch (error) {
         console.log(error);
         return response_500(res, "Internal server error");

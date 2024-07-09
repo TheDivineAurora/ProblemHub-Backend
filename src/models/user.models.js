@@ -41,7 +41,8 @@ const UserSchema = new mongoose.Schema({
         },
     },
     googleId: {
-        type: String
+        type: String,
+        select: false
     },
 
     profileImageUrl: {

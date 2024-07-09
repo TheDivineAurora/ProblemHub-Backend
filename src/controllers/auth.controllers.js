@@ -69,7 +69,6 @@ exports.login = async (req, res) => {
         return response_200(res, "User Logged In Succesfully", {
             email: userExists.email,
             username: userExists.username,
-            token : token
         });
     } catch (error) {
         console.log(error);
